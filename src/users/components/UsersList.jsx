@@ -4,7 +4,7 @@ import UserItem from "./UserItem";
 
 export default function UsersList({ items }) {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-10">
       {!items || items.length === 0 ? (
         <h2 className='text-white mt-5'>No users found.</h2>
       ) : (

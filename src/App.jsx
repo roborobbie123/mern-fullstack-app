@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <MainNavigation />
-      <main className="bg-gray-800 h-screen overflow-y-auto py-10">
+      <main className="bg-gray-800 h-screen overflow-y-auto pt-10 py-0">
         <Routes>
           <Route path="/" element={<Users />} />
           <Route path="/places/new" element={<NewPlace />} />
