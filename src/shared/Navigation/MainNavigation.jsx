@@ -7,6 +7,7 @@ import Backdrop from "./Backdrop";
 
 export default function MainNavigation({ props }) {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+
   function handleOpenDrawer() {
     setDrawerIsOpen(true);
   }
@@ -18,13 +19,13 @@ export default function MainNavigation({ props }) {
     <>
       {drawerIsOpen && <Backdrop onClick={handleCloseDrawer} />}
 
-      <SideDrawer show={drawerIsOpen}>
+      <SideDrawer show={drawerIsOpen} onClick={handleCloseDrawer}>
         <nav className="md:hidden absolute bg-white h-screen w-1/3 flex items-center justify-center rounded-sm">
           <NavLinks />
         </nav>
       </SideDrawer>
 
-      <header className="flex p-2 h-15 items-center gap-3 bg-red-500 text-white justify-between">
+      <header className="flex p-2 h-15 items-center gap-3 bg-red-500 text-white justify-between fixed w-screen">
         <div className="flex md:ml-4 gap-1 items-center">
           <button className="text-4xl block md:hidden cursor-pointer hover:text-amber-100">
             <IoMdMenu onClick={handleOpenDrawer} />
