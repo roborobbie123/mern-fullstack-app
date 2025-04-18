@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Modal from "../../shared/Modal";
 import Map from "../../shared/Map";
+import { Link } from "react-router-dom";
 
 export default function PlaceItem({
   id,
@@ -51,11 +52,13 @@ export default function PlaceItem({
           >
             VIEW ON MAP
           </button>
-          <button
-            className={`${buttonStyle} bg-red-500 text-white hover:bg-white hover:text-red-500`}
-          >
-            EDIT
-          </button>
+          <Link to={`/places/${id}`}>
+            <button
+              className={`${buttonStyle} bg-red-500 text-white hover:bg-white hover:text-red-500`}
+            >
+              EDIT
+            </button>
+          </Link>
           <button
             className={`${buttonStyle} text-white bg-red-900 hover:bg-white hover:text-red-900`}
           >

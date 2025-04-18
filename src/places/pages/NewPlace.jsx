@@ -54,16 +54,21 @@ export default function NewPlace() {
     });
   }, []);
 
+  const placeSubmitHandler = event => {
+    event.preventDefault();
+    console.log(formState.inputs);
+  }
+
   return (
     <div className="mx-auto mt-10 flex justify-center bg-white px-2 py-5 rounded-sm w-[20rem] md:w-[30rem] shadow-sm">
-      <form>
+      <form onSubmit={placeSubmitHandler}> 
         <Input
           id="title"
           type="text"
           label="Title"
           element="input"
           validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid title"
+          errorText="Please enter a valid title."
           onInput={inputHandler}
         />
         <Input
@@ -71,7 +76,15 @@ export default function NewPlace() {
           label="Description"
           element="textarea"
           validators={[VALIDATOR_MINLENGTH(5)]}
-          errorText="Please enter a valid description (at least 5 characters)"
+          errorText="Please enter a valid description (at least 5 characters)."
+          onInput={inputHandler}
+        />
+        <Input
+          id="address"
+          label="Address"
+          element="input"
+          validators={[VALIDATOR_REQUIRE]}
+          errorText="Please enter a valid address."
           onInput={inputHandler}
         />
         <button
