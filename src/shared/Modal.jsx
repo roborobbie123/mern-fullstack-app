@@ -15,7 +15,7 @@ function ModalOverlay({ header, onSubmit, children, footer, nodeRef }) {
         <header className="bg-purple-800 p-2 text-white text-center md:text-xl text-sm font-semibold">
           <h2>{header}</h2>
         </header>
-        <div className="flex-grow">
+        <div className="flex-grow p-1">
           <form
             className='h-full' onSubmit={onSubmit ? onSubmit : (event) => event.preventDefault()}
           >

@@ -3,6 +3,8 @@ import { useState } from "react";
 import Modal from "../../shared/Modal";
 import Map from "../../shared/Map";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../shared/auth-context";
+import { useContext } from "react";
 
 export default function PlaceItem({
   id,
@@ -13,6 +15,7 @@ export default function PlaceItem({
   creator,
   coordinates,
 }) {
+  const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
@@ -21,6 +24,10 @@ export default function PlaceItem({
 
   const handleShowDelete = () => setShowDelete(true);
   const handleCloseDelete = () => setShowDelete(false);
+  const deletePlace = () => {
+    console.log(`DELETING ${title}`);
+    handleCloseDelete();
+  };
 
   const buttonStyle = "border px-2 py-1 rounded-sm shadow-xl cursor-pointer";
 
@@ -50,11 +57,14 @@ export default function PlaceItem({
           <div>
             <button
               onClick={handleCloseDelete}
-              className="border w-20 py-1 text-center text-red-500 bg-white hover:bg-red-100 hover:text-white rounded-md shadow-lg cursor-pointer"
+              className="border w-20 py-1 text-center text-red-500 bg-white hover:bg-red-100 hover:text-black rounded-md shadow-lg cursor-pointer"
             >
               Cancel
             </button>
-            <button className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer">
+            <button
+              onClick={deletePlace}
+              className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+            >
               Delete
             </button>
           </div>
@@ -81,19 +91,23 @@ export default function PlaceItem({
           >
             VIEW ON MAP
           </button>
-          <Link to={`/places/${id}`}>
-            <button
-              className={`${buttonStyle} bg-red-500 text-white hover:bg-white hover:text-red-500`}
-            >
-              EDIT
-            </button>
-          </Link>
-          <button
-            className={`${buttonStyle} text-white bg-red-900 hover:bg-white hover:text-red-900`}
-            onClick={handleShowDelete}
-          >
-            DELETE
-          </button>
+          {auth.isLoggedIn && (
+            <>
+              <Link to={`/places/${id}`}>
+                <button
+                  className={`${buttonStyle} bg-red-500 text-white hover:bg-white hover:text-red-500`}
+                >
+                  EDIT
+                </button>
+              </Link>
+              <button
+                className={`${buttonStyle} text-white bg-red-900 hover:bg-white hover:text-red-900`}
+                onClick={handleShowDelete}
+              >
+                DELETE
+              </button>
+            </>
+          )}
         </div>
       </li>
     </>
