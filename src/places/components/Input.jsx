@@ -21,7 +21,7 @@ const inputReducer = (state, action) => {
 
 export default function Input({ ...props }) {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: props.initialValue || '',
+    value: props.initialValue || "",
     isTouched: false,
     isValid: props.valid || false,
   });
@@ -80,7 +80,9 @@ export default function Input({ ...props }) {
         !inputState.isValid && inputState.isTouched && invalidStyle
       }`}
     >
-      <label className='font-semibold' htmlFor={props.id}>{props.label}</label>
+      <label className="font-semibold" htmlFor={props.id}>
+        {props.label}
+      </label>
       {element}
       {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
     </div>

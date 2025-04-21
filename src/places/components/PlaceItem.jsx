@@ -14,9 +14,13 @@ export default function PlaceItem({
   coordinates,
 }) {
   const [showMap, setShowMap] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   const handleOpenMap = () => setShowMap(true);
   const handleCloseMap = () => setShowMap(false);
+
+  const handleShowDelete = () => setShowDelete(true);
+  const handleCloseDelete = () => setShowDelete(false);
 
   const buttonStyle = "border px-2 py-1 rounded-sm shadow-xl cursor-pointer";
 
@@ -27,7 +31,10 @@ export default function PlaceItem({
         onCancel={handleCloseMap}
         header={address}
         footer={
-          <button className="cursor-pointer" onClick={handleCloseMap}>
+          <button
+            className="cursor-pointer border w-20 py-1 text-center text-white bg-red-500 hover:bg-white hover:text-red-500 rounded-md shadow-lg"
+            onClick={handleCloseMap}
+          >
             CLOSE
           </button>
         }
@@ -35,6 +42,28 @@ export default function PlaceItem({
         <div className="h-full w-full">
           <Map center={coordinates} zoom={16} />
         </div>
+      </Modal>
+      <Modal
+        header="Are you sure?"
+        show={showDelete}
+        footer={
+          <div>
+            <button
+              onClick={handleCloseDelete}
+              className="border w-20 py-1 text-center text-red-500 bg-white hover:bg-red-100 hover:text-white rounded-md shadow-lg cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer">
+              Delete
+            </button>
+          </div>
+        }
+      >
+        <p>
+          Do you want to proceed and delete this place? Please note that this
+          action is final.
+        </p>
       </Modal>
       <li className="my-5 w-120 h-3/5 bg-white text-center rounded-md">
         <div>
@@ -61,6 +90,7 @@ export default function PlaceItem({
           </Link>
           <button
             className={`${buttonStyle} text-white bg-red-900 hover:bg-white hover:text-red-900`}
+            onClick={handleShowDelete}
           >
             DELETE
           </button>

@@ -23,7 +23,7 @@ function ModalOverlay({ header, onSubmit, children, footer, nodeRef }) {
           </form>
         </div>
         <div className='flex justify-end pr-2 mb-2'>
-          <footer className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-white hover:text-red-500 rounded-md shadow-lg">
+          <footer>
             {footer}
           </footer>
         </div>
