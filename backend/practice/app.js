@@ -1,9 +1,13 @@
 const express = require("express");
-
-const route = require("./routes");
+const bodyParser = require("body-parser");
+const mongoPractice = require("./mongo");
+const mongoosePractice = require("./mongoose");
 
 const app = express();
 
-app.use("/place", route);
+app.use(bodyParser.json());
 
-app.listen(4000);
+app.post("/products", mongoosePractice.createProduct);
+app.get("/products", mongoosePractice.getProducts);
+
+app.listen(3000);

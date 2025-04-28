@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
-const HttpError = require('./models/http-error');
+const HttpError = require("./models/http-error");
 
 const app = express();
 
@@ -13,9 +14,9 @@ app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
-    const error = new HttpError('Could not find this route.', 404);
-    throw error;
-})
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
+});
 
 app.use((error, req, res, next) => {
   if (res.headerSent) {
@@ -25,4 +26,16 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occured." });
 });
 
-app.listen(4000);
+const url =
+  "mongodb+srv://roborobbie123:GddF89lEKz7hV43E@cluster0.23djl5g.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose
+  .connect(url)
+  .then(() => {
+    app.listen(4000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
