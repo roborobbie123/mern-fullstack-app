@@ -20,11 +20,11 @@ function App() {
 
   const login = useCallback(() => {
     setIsLoggedIn(true);
-    console.log('logged in');
+    console.log("logged in");
   }, []);
   const logout = useCallback(() => {
     setIsLoggedIn(false);
-    console.log('logged out');
+    console.log("logged out");
   }, []);
 
   return (
