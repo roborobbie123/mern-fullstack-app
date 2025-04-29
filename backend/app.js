@@ -10,6 +10,16 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-Width, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
+
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
@@ -27,7 +37,7 @@ app.use((error, req, res, next) => {
 });
 
 const url =
-  "mongodb+srv://roborobbie123:GddF89lEKz7hV43E@cluster0.23djl5g.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://roborobbie123:GddF89lEKz7hV43E@cluster0.23djl5g.mongodb.net/mern?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose
   .connect(url)
@@ -37,5 +47,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-
