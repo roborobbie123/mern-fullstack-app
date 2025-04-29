@@ -9,26 +9,36 @@ export default function useHttpClient() {
   const sendRequest = useCallback(
     async (url, method = "GET", body = null, headers = {}) => {
       setIsLoading(true);
-      const httpAobterCtrl = new AbortController();
-      activeHttpRequests.current.push(httpAobterCtrl);
+      const httpAbortCtrl = new AbortController();
+      activeHttpRequests.current.push(httpAbortCtrl);
 
       try {
         const response = await fetch(url, {
           method,
           body,
           headers,
-          signal: httpAobterCtrl.signal,
+          signal: httpAbortCtrl.signal,
         });
-
+        setIsLoading(false);
         const responseData = await response.json();
-        if (!res.ok) {
+
+        activeHttpRequests.current = activeHttpRequests.current.filter(
+          (reqCtrl) => reqCtrl !== httpAbortCtrl
+        );
+
+        if (!response.ok) {
           throw new Error(responseData.message);
         }
         return responseData;
       } catch (err) {
+        if (err.name === "AbortError") {
+          console.log(err);
+          return;
+        }
         setError(err.message);
+        setIsLoading(false);
+        throw err;
       }
-      setIsLoading(false);
     },
     []
   );
@@ -39,7 +49,7 @@ export default function useHttpClient() {
 
   useEffect(() => {
     return () => {
-      activeHttpRequests.current.forEach((abortCtrl) => abortCtrl.abortCtrl());
+      activeHttpRequests.current.forEach((abortCtrl) => abortCtrl.abort());
     };
   }, []);
 

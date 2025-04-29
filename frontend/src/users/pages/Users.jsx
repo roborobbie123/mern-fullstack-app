@@ -3,45 +3,33 @@ import { useEffect, useState } from "react";
 
 import UsersList from "../components/UsersList";
 import Modal from "../../shared/Modal";
+import useHttpClient from "../../shared/http-hook";
 
-import RobertBarrett from "../../assets/RobertBarrett.jpeg";
-import lebron from "../../assets/lebron.png";
-import spongebob from "../../assets/spongebob.png";
+// import RobertBarrett from "../../assets/RobertBarrett.jpeg";
+// import lebron from "../../assets/lebron.png";
+// import spongebob from "../../assets/spongebob.png";
+
+// const USERS = [
+//   { id: "u1", name: "Robert Barrett", image: RobertBarrett, placeCount: 5 },
+//   { id: "u2", name: "Spongebob", image: spongebob, placeCount: 2 },
+//   { id: "u3", name: "Lebron James", image: lebron, placeCount: 23 },
+// ];
 
 export default function Users() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [userData, setUserData] = useState([]);
-
-  const USERS = [
-    { id: "u1", name: "Robert Barrett", image: RobertBarrett, placeCount: 5 },
-    { id: "u2", name: "Spongebob", image: spongebob, placeCount: 2 },
-    { id: "u3", name: "Lebron James", image: lebron, placeCount: 23 },
-  ];
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
-    const sendRequest = async () => {
-      setIsLoading(true);
+    const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/users");
-
-        const resData = await res.json();
-        if (!res.ok) {
-          throw new Error(resData.message);
-        }
-        setUserData(resData.users);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err.message);
-      }
-      setIsLoading(false);
+        const responseData = await sendRequest(
+          "http://localhost:4000/api/users"
+        );
+        setUserData(responseData.users);
+      } catch (err) {}
     };
-    sendRequest();
-  }, []);
-
-  const errorHandler = () => {
-    setError(null);
-  };
+    fetchUsers();
+  }, [sendRequest]);
 
   return (
     <div>
@@ -53,7 +41,7 @@ export default function Users() {
             <div>
               <button
                 className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
-                onClick={handleError}
+                onClick={clearError}
               >
                 Back
               </button>

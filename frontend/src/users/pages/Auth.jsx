@@ -10,13 +10,13 @@ import {
 import { AuthContext } from "../../shared/auth-context";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import useHttpClient from "../../shared/http-hook";
 
 export default function Auth() {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
   const [authPage, setAuthPage] = useState("login");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -33,64 +33,47 @@ export default function Auth() {
 
   const handleError = () => {
     setError(null);
-  }
+  };
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
     if (authPage === "login") {
       try {
-        setIsLoading(true);
-        const res = await fetch("http://localhost:4000/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          "http://localhost:4000/api/users/login",
+          "POST",
+          JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-        });
-
-        const responseData = await res.json();
-        if (!res.ok) {
-          throw new Error(responseData.message);
-        }
-        console.log(responseData);
-        setIsLoading(false);
+          {
+            "Content-Type": "application/json",
+          }
+        );
         auth.login();
         navigate("/");
       } catch (err) {
         console.log(err);
-        setIsLoading(false);
-        setError(err.message || "Something went wrong, please try again.");
       }
-    } else {
+    } else if (authPage === "signup") {
       try {
-        setIsLoading(true);
-        const res = await fetch("http://localhost:4000/api/users/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          "http://localhost:4000/api/users/signup",
+          "POST",
+          JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-        });
+          {
+            "Content-Type": "application/json",
+          }
+        );
 
-        const responseData = await res.json();
-        if (!res.ok) {
-          throw new Error(responseData.message);
-        }
-        console.log(responseData);
-        setIsLoading(false);
         auth.login();
         navigate("/");
       } catch (err) {
         console.log(err);
-        setIsLoading(false);
-        setError(err.message || "Something went wrong, please try again.");
       }
     }
   };
@@ -98,20 +81,25 @@ export default function Auth() {
   if (authPage === "login") {
     return (
       <>
-      {error && <Modal
-          header="An error has occurred"
-          show={error}
-          footer={
-            <div>
-              <button className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"onClick={handleError}>Back</button>
-            </div>
-          }
-        >
-          <p className='text-center mt-5'>
-            {error}
-          </p>
-        </Modal>}
-        
+        {error && (
+          <Modal
+            header="An error has occurred"
+            show={error}
+            footer={
+              <div>
+                <button
+                  className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+                  onClick={clearError}
+                >
+                  Back
+                </button>
+              </div>
+            }
+          >
+            <p className="text-center mt-5">{error}</p>
+          </Modal>
+        )}
+
         <div className="mx-auto mt-10 flex flex-col justify-center bg-white py-5 rounded-sm w-[20rem] md:w-[30rem] shadow-sm">
           {isLoading ? (
             <h1 className="text-center text-4xl p-10 my-20">Loading...</h1>
@@ -161,19 +149,24 @@ export default function Auth() {
   } else if (authPage === "signup") {
     return (
       <>
-        {error && <Modal
-          header="An error has occurred"
-          show={error}
-          footer={
-            <div>
-              <button className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"onClick={handleError}>Back</button>
-            </div>
-          }
-        >
-          <p className='text-center mt-5'>
-            {error}
-          </p>
-        </Modal>}
+        {error && (
+          <Modal
+            header="An error has occurred"
+            show={error}
+            footer={
+              <div>
+                <button
+                  className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+                  onClick={clearError}
+                >
+                  Back
+                </button>
+              </div>
+            }
+          >
+            <p className="text-center mt-5">{error}</p>
+          </Modal>
+        )}
         <div className="mx-auto mt-10 flex flex-col justify-center bg-white py-5 rounded-sm w-[20rem] md:w-[30rem] shadow-sm">
           {isLoading ? (
             <h1 className="text-center text-4xl p-10 my-20">Loading...</h1>
