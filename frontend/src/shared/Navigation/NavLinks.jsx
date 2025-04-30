@@ -28,7 +28,7 @@ export default function NavLinks() {
             className={({ isActive }) =>
               isActive ? `${linkStyle} bg-amber-300 text-black` : linkStyle
             }
-            to="/u1/places"
+            to={`/${auth.userId}/places`}
           >
             MY PLACES
           </NavLink>

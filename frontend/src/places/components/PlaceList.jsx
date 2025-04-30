@@ -2,7 +2,7 @@ import React from "react";
 import PlaceItem from "./PlaceItem";
 import { Link } from "react-router-dom";
 
-export default function PlaceList({ places }) {
+export default function PlaceList({ places, onDelete }) {
   return (
     <div>
       {!places || places.length === 0 ? (
@@ -24,6 +24,7 @@ export default function PlaceList({ places }) {
               address={place.address}
               creatorId={place.creator}
               coordinates={place.location}
+              onDelete={onDelete}
             />
           ))}
         </ul>

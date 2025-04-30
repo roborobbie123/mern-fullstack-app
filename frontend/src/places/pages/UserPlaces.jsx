@@ -50,6 +50,10 @@ export default function UserPlaces() {
     fetchPlaces();
   }, [sendRequest]);
 
+  const onDelete = (id) => {
+    setUserPlaces(prev => prev.filter(place => place.id !== id))
+  }
+
   return (
     <div>
       {error && (
@@ -73,7 +77,7 @@ export default function UserPlaces() {
       {isLoading ? (
         <h1 className="text-center text-4xl p-10 my-20">Loading...</h1>
       ) : (
-        <PlaceList places={userPlaces} />
+        <PlaceList places={userPlaces} onDelete={onDelete}/>
       )}
     </div>
   );

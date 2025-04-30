@@ -69,7 +69,7 @@ export default function UpdatePlace() {
         }),
         { "Content-Type": "application/json" }
       );
-      navigate("/");
+      navigate("/" + auth.userId + "/places");
     } catch (err) {
       console.log(err);
     }
@@ -103,36 +103,38 @@ export default function UpdatePlace() {
           <p className="text-center mt-5">{error}</p>
         </Modal>
       )}
-      <form className="flex-col" onSubmit={sendUpdate}>
-        <Input
-          id="title"
-          label="Title"
-          type="text"
-          validators={[VALIDATOR_MINLENGTH(5), VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid title"
-          onInput={inputHandler}
-          initialValue={formState.inputs.title.value}
-          valid={formState.inputs.title.isValid}
-        />
-        <Input
-          id="description"
-          label="Description"
-          type="text"
-          element="textarea"
-          validators={[VALIDATOR_MINLENGTH(5), VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid description (min 5 characters)."
-          onInput={inputHandler}
-          initialValue={formState.inputs.description.value}
-          valid={formState.inputs.description.isValid}
-        />
-        <button
-          disabled={!formState.isValid}
-          type="submit"
-          className="border ml-2 py-1 px-5 text-center text-white bg-red-500 hover:bg-white hover:text-red-500 rounded-md shadow-lg disabled:bg-gray-600 disabled:text-gray-400"
-        >
-          UPDATE PLACE
-        </button>
-      </form>
+      {!isLoading && loadedPlace && (
+        <form className="flex-col" onSubmit={sendUpdate}>
+          <Input
+            id="title"
+            label="Title"
+            type="text"
+            validators={[VALIDATOR_MINLENGTH(5), VALIDATOR_REQUIRE()]}
+            errorText="Please enter a valid title"
+            onInput={inputHandler}
+            initialValue={formState.inputs.title.value}
+            valid={formState.inputs.title.isValid}
+          />
+          <Input
+            id="description"
+            label="Description"
+            type="text"
+            element="textarea"
+            validators={[VALIDATOR_MINLENGTH(5), VALIDATOR_REQUIRE()]}
+            errorText="Please enter a valid description (min 5 characters)."
+            onInput={inputHandler}
+            initialValue={formState.inputs.description.value}
+            valid={formState.inputs.description.isValid}
+          />
+          <button
+            disabled={!formState.isValid}
+            type="submit"
+            className="border ml-2 py-1 px-5 text-center text-white bg-red-500 hover:bg-white hover:text-red-500 rounded-md shadow-lg disabled:bg-gray-600 disabled:text-gray-400"
+          >
+            UPDATE PLACE
+          </button>
+        </form>
+      )}
     </div>
   );
 }

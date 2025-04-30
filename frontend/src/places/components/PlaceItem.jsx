@@ -5,6 +5,9 @@ import Map from "../../shared/Map";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../shared/auth-context";
 import { useContext } from "react";
+import useHttpClient from "../../shared/http-hook";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function PlaceItem({
   id,
@@ -14,8 +17,11 @@ export default function PlaceItem({
   address,
   creator,
   coordinates,
+  onDelete,
 }) {
   const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const navigate = useNavigate();
   const [showMap, setShowMap] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
@@ -24,15 +30,48 @@ export default function PlaceItem({
 
   const handleShowDelete = () => setShowDelete(true);
   const handleCloseDelete = () => setShowDelete(false);
-  const deletePlace = () => {
-    console.log(`DELETING ${title}`);
+
+  const deletePlace = async () => {
+    try {
+      await sendRequest(`http://localhost:4000/api/places/${id}`, "DELETE");
+      onDelete(id);
+    } catch (error) {
+      console.log(error);
+    }
+
     handleCloseDelete();
   };
 
   const buttonStyle = "border px-2 py-1 rounded-sm shadow-xl cursor-pointer";
 
+  if (isLoading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
   return (
     <>
+      {error && (
+        <Modal
+          header="An error has occurred"
+          show={error}
+          footer={
+            <div>
+              <button
+                className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+                onClick={clearError}
+              >
+                Back
+              </button>
+            </div>
+          }
+        >
+          <p className="text-center mt-5">{error}</p>
+        </Modal>
+      )}
       <Modal
         show={showMap}
         onCancel={handleCloseMap}
@@ -91,7 +130,7 @@ export default function PlaceItem({
           >
             VIEW ON MAP
           </button>
-          {auth.isLoggedIn && (
+          {(auth.isLoggedIn && auth.userId === creator) && (
             <>
               <Link to={`/places/${id}`}>
                 <button
