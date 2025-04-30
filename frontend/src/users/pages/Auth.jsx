@@ -39,7 +39,7 @@ export default function Auth() {
     event.preventDefault();
     if (authPage === "login") {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:4000/api/users/login",
           "POST",
           JSON.stringify({
@@ -50,14 +50,14 @@ export default function Auth() {
             "Content-Type": "application/json",
           }
         );
-        auth.login();
+        auth.login(responseData.user.id);
         navigate("/");
       } catch (err) {
         console.log(err);
       }
     } else if (authPage === "signup") {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:4000/api/users/signup",
           "POST",
           JSON.stringify({
@@ -69,8 +69,8 @@ export default function Auth() {
             "Content-Type": "application/json",
           }
         );
-
-        auth.login();
+        auth.set;
+        auth.login(responseData.user.id);
         navigate("/");
       } catch (err) {
         console.log(err);

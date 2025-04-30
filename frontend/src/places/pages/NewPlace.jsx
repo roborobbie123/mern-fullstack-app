@@ -1,12 +1,17 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useReducer, useContext } from "react";
 import Input from "../components/Input";
+import useHttpClient from "../../shared/http-hook";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/validators";
 import { useForm } from "../../shared/form-hook";
+import { AuthContext } from "../../shared/auth-context";
+import Modal from "../../shared/Modal";
 
 export default function NewPlace() {
+  const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -25,13 +30,50 @@ export default function NewPlace() {
     false
   );
 
-  const placeSubmitHandler = (event) => {
+  const placeSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+    console.log(auth.userId);
+    console.log(formState.inputs.title.value);
+    console.log(formState.inputs.description.value);
+    console.log(formState.inputs.address.value);
+
+    try {
+      await sendRequest(
+        "http://localhost:4000/api/places",
+        "POST",
+        JSON.stringify({
+          title: formState.inputs.title.value,
+          description: formState.inputs.description.value,
+          address: formState.inputs.address.value,
+          creator: auth.userId,
+        }),
+        { 'Content-Type': 'application/json'}
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="mx-auto mt-10 flex justify-center bg-white px-2 py-5 rounded-sm w-[20rem] md:w-[30rem] shadow-sm">
+      {error && (
+          <Modal
+            header="An error has occurred"
+            show={error}
+            footer={
+              <div>
+                <button
+                  className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+                  onClick={clearError}
+                >
+                  Back
+                </button>
+              </div>
+            }
+          >
+            <p className="text-center mt-5">{error}</p>
+          </Modal>
+        )}
       <form onSubmit={placeSubmitHandler}>
         <Input
           id="title"
