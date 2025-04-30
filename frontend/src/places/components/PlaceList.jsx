@@ -13,7 +13,7 @@ export default function PlaceList({ places }) {
           </button>
         </div>
       ) : (
-        <ul className="flex flex-col items-center mx-auto mt-10 h-screen">
+        <ul className="flex flex-col items-center mx-auto my-10 h-full">
           {places.map((place) => (
             <PlaceItem
               key={place.id}

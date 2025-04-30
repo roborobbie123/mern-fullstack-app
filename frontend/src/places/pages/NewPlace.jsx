@@ -1,4 +1,5 @@
 import React, { useCallback, useReducer, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import useHttpClient from "../../shared/http-hook";
 import {
@@ -30,12 +31,10 @@ export default function NewPlace() {
     false
   );
 
+  const navigate = useNavigate();
+
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(auth.userId);
-    console.log(formState.inputs.title.value);
-    console.log(formState.inputs.description.value);
-    console.log(formState.inputs.address.value);
 
     try {
       await sendRequest(
@@ -47,8 +46,9 @@ export default function NewPlace() {
           address: formState.inputs.address.value,
           creator: auth.userId,
         }),
-        { 'Content-Type': 'application/json'}
+        { "Content-Type": "application/json" }
       );
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -57,23 +57,23 @@ export default function NewPlace() {
   return (
     <div className="mx-auto mt-10 flex justify-center bg-white px-2 py-5 rounded-sm w-[20rem] md:w-[30rem] shadow-sm">
       {error && (
-          <Modal
-            header="An error has occurred"
-            show={error}
-            footer={
-              <div>
-                <button
-                  className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
-                  onClick={clearError}
-                >
-                  Back
-                </button>
-              </div>
-            }
-          >
-            <p className="text-center mt-5">{error}</p>
-          </Modal>
-        )}
+        <Modal
+          header="An error has occurred"
+          show={error}
+          footer={
+            <div>
+              <button
+                className="border w-20 py-1 text-center text-white bg-red-500 hover:bg-red-700 rounded-md shadow-lg cursor-pointer"
+                onClick={clearError}
+              >
+                Back
+              </button>
+            </div>
+          }
+        >
+          <p className="text-center mt-5">{error}</p>
+        </Modal>
+      )}
       <form onSubmit={placeSubmitHandler}>
         <Input
           id="title"
