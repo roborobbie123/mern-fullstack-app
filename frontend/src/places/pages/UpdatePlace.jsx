@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { DUMMY_PLACES } from "./UserPlaces";
 import Input from "../components/Input";
 import {
   VALIDATOR_REQUIRE,

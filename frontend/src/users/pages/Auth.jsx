@@ -2,6 +2,7 @@ import { useForm } from "../../shared/form-hook";
 import { useState } from "react";
 import Input from "../../places/components/Input";
 import Modal from "../../shared/Modal";
+import ImageUpload from '../../shared/ImageUpload';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -37,6 +38,8 @@ export default function Auth() {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+    console.log(formState.inputs)
+    
     if (authPage === "login") {
       try {
         const responseData = await sendRequest(
@@ -184,6 +187,7 @@ export default function Auth() {
                   onInput={inputHandler}
                   placeholder=""
                 />
+                <ImageUpload />
                 <Input
                   id="email"
                   element="input"
@@ -204,6 +208,7 @@ export default function Auth() {
                   onInput={inputHandler}
                   placeholder=""
                 />
+                
                 <button
                   type="submit"
                   disabled={!formState.isValid}

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../shared/auth-context";
 import { useContext } from "react";
 import useHttpClient from "../../shared/http-hook";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export default function PlaceItem({
@@ -130,7 +129,7 @@ export default function PlaceItem({
           >
             VIEW ON MAP
           </button>
-          {(auth.isLoggedIn && auth.userId === creator) && (
+          {auth.isLoggedIn && auth.userId === creator && (
             <>
               <Link to={`/places/${id}`}>
                 <button

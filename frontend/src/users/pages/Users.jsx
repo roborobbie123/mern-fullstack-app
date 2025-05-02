@@ -5,16 +5,6 @@ import UsersList from "../components/UsersList";
 import Modal from "../../shared/Modal";
 import useHttpClient from "../../shared/http-hook";
 
-// import RobertBarrett from "../../assets/RobertBarrett.jpeg";
-// import lebron from "../../assets/lebron.png";
-// import spongebob from "../../assets/spongebob.png";
-
-// const USERS = [
-//   { id: "u1", name: "Robert Barrett", image: RobertBarrett, placeCount: 5 },
-//   { id: "u2", name: "Spongebob", image: spongebob, placeCount: 2 },
-//   { id: "u3", name: "Lebron James", image: lebron, placeCount: 23 },
-// ];
-
 export default function Users() {
   const [userData, setUserData] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
