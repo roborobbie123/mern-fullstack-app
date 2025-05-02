@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { validationResult } = require("express-validator");
 const Place = require("../models/place");
 const User = require("../models/user");
@@ -78,7 +79,7 @@ const createPlace = async (req, res, next) => {
       lat: coordinates.lat,
       lng: coordinates.lng,
     },
-    image: "image",
+    image: req.file.path,
     creator,
   });
 
@@ -155,6 +156,8 @@ const deletePlace = async (req, res, next) => {
     return next(new HttpError("Could not find place for this id.", 404));
   }
 
+  const imagePath = place.image;
+
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -167,6 +170,10 @@ const deletePlace = async (req, res, next) => {
   } catch (err) {
     return next(new HttpError("Could not delete place", 500));
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: "Deleted place." });
 };

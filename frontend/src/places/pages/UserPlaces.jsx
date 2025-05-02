@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import useHttpClient from "../../shared/http-hook";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../shared/auth-context";
@@ -10,6 +11,8 @@ export default function UserPlaces() {
   const auth = useContext(AuthContext);
   const [userPlaces, setUserPlaces] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  console.log('userplaces: ' + auth.userId)
 
   const fetchPlaces = async () => {
     try {

@@ -52,13 +52,13 @@ export default function ImageUpload({ onInput, id, errorText }) {
             <img src={previewURL} alt="preview" />
           </div>
         )}
-        {!previewURL && <p className="text-center p-10">Please pick an image.</p>}
+        {!previewURL && <p className="text-center p-10">Please upload a profile picture.</p>}
         <button
           type="button"
           className="border ml-2 py-1 px-5 text-center text-white bg-red-500 hover:bg-white hover:text-red-500 rounded-md shadow-lg disabled:bg-gray-600 disabled:text-gray-400 cursor-pointer"
           onClick={pickImageHandler}
         >
-          PICK IMAGE
+          {!previewURL ? 'PICK IMAGE' : 'CHANGE IMAGE'}
         </button>
       </div>
       {!isValid && <p>{errorText}</p>}

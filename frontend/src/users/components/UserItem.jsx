@@ -14,7 +14,7 @@ export default function UserItem({ id, name, image, placeCount }) {
           <div className="p-5">
             <img
               className="rounded-full h-20 w-20 border-1 object-cover"
-              src={image}
+              src={`http://localhost:4000/${image}`}
             />
           </div>
           <div>
