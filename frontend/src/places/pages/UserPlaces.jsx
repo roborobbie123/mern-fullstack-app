@@ -12,8 +12,6 @@ export default function UserPlaces() {
   const [userPlaces, setUserPlaces] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  console.log('userplaces: ' + auth.userId)
-
   const fetchPlaces = async () => {
     try {
       const response = await sendRequest(

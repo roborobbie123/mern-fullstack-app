@@ -30,12 +30,11 @@ export default function PlaceItem({
   const handleShowDelete = () => setShowDelete(true);
   const handleCloseDelete = () => setShowDelete(false);
 
-  console.log('place item: ' + auth.userId)
-  console.log('creator: ' + creatorId)
-
   const deletePlace = async () => {
     try {
-      await sendRequest(`http://localhost:4000/api/places/${id}`, "DELETE");
+      await sendRequest(`http://localhost:4000/api/places/${id}`, "DELETE", null, {
+        Authorization: "Bearer " + auth.token,
+      });
       onDelete(id);
     } catch (error) {
       console.log(error);
@@ -118,7 +117,10 @@ export default function PlaceItem({
       </Modal>
       <li className="my-5 w-120 h-3/5 bg-white text-center rounded-md">
         <div>
-          <img src={`http://localhost:4000/${image}`} className="w-full h-75 rounded-t-md" />
+          <img
+            src={`http://localhost:4000/${image}`}
+            className="w-full h-75 rounded-t-md"
+          />
         </div>
         <div className="p-2">
           <h2 className="text-2xl font-semibold my-1">{title}</h2>

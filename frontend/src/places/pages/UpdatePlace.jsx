@@ -37,6 +37,7 @@ export default function UpdatePlace() {
       try {
         const response = await sendRequest(
           `http://localhost:4000/api/places/${placeId}`
+
         );
         setLoadedPlace(response.place);
         setFormData({
@@ -66,8 +67,11 @@ export default function UpdatePlace() {
           title: formState.inputs.title.value,
           description: formState.inputs.description.value,
         }),
-        { "Content-Type": "application/json" }
+        { "Content-Type": "application/json",
+          Authorization: 'Bearer ' + auth.token
+         }
       );
+      console.log("Token: " + auth.token)
       navigate("/" + auth.userId + "/places");
     } catch (err) {
       console.log(err);

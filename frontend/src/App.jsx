@@ -18,10 +18,12 @@ import { useState, useCallback } from "react";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
 
-  const login = useCallback((uid) => {
+  const login = useCallback((uid, token) => {
     setIsLoggedIn(true);
     setUserId(uid);
+    setToken(token);
     console.log("logged in");
   }, []);
   const logout = useCallback(() => {
@@ -30,10 +32,34 @@ function App() {
     console.log("logged out");
   }, []);
 
+  let routes;
+  if (token) {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/places/new" element={<NewPlace />} />
+        <Route path="/places/:placeId" element={<UpdatePlace />} />
+        <Route path="/:userId/places" element={<UserPlaces />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/:userId/places" element={<UserPlaces />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
+
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
+        isLoggedIn: !!token,
+        token: token,
         login: login,
         logout: logout,
         userId: userId,
@@ -42,14 +68,7 @@ function App() {
       <Router>
         <MainNavigation />
         <main className="bg-gray-800 h-screen overflow-y-auto pt-10 py-0">
-          <Routes>
-            <Route path="/" element={<Users />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/places/new" element={<NewPlace />} />
-            <Route path="/places/:placeId" element={<UpdatePlace />} />
-            <Route path="/:userId/places" element={<UserPlaces />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          {routes}
         </main>
       </Router>
     </AuthContext.Provider>
