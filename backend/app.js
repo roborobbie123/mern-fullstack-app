@@ -47,7 +47,7 @@ app.use((error, req, res, next) => {
 });
 
 const url =
-  "mongodb+srv://roborobbie123:GddF89lEKz7hV43E@cluster0.23djl5g.mongodb.net/mern?retryWrites=true&w=majority&appName=Cluster0";
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.23djl5g.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose
   .connect(url)
